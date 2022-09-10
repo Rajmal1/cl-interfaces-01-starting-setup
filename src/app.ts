@@ -1,6 +1,6 @@
 class Department {
   // public name: string;
-  private employees: string[] = [];
+  protected employees: string[] = [];
 
   constructor(private readonly id: number, public name: string) {}
 
@@ -18,17 +18,60 @@ class Department {
   }
 }
 
-const accouting = new Department(1, "Accounting");
+class ITDepartment extends Department {
+  public admins: string[];
 
-accouting.addEmployee("Max");
-accouting.addEmployee("Manu");
+  constructor(id: number, admins: string[]) {
+    super(id, "IT");
+    this.admins = admins;
+  }
+}
+
+class AccoutingDepartment extends Department {
+  constructor(id: number, private reports: string[]) {
+    super(id, "Accouting");
+  }
+
+  addReport(text: string) {
+    this.reports.push(text);
+  }
+
+  printReports() {
+    console.log(this.reports);
+  }
+
+  override addEmployee(name: string) {
+    if (name === "Max") {
+      return;
+    }
+
+    this.employees.push(name);
+  }
+}
+
+const it = new ITDepartment(1, ["Max"]);
+
+it.addEmployee("Max");
+it.addEmployee("Manu");
 // accouting.employees[2] = 'Anna';
 
-console.log(accouting);
+console.log(it);
 
-accouting.describe();
-accouting.printEmployeeInfo();
+it.describe();
+it.printEmployeeInfo();
 
 // const accoutingCopy = { name: "DUMMY", describe: accouting.describe };
 
 // accoutingCopy.describe();
+
+const accouting = new AccoutingDepartment(2, []);
+
+console.log(accouting);
+
+accouting.addReport("Something went wrong...");
+
+accouting.addEmployee("Max");
+accouting.addEmployee("Manu");
+
+accouting.printReports();
+accouting.printEmployeeInfo();
