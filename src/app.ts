@@ -38,6 +38,7 @@ class ITDepartment extends Department {
 
 class AccoutingDepartment extends Department {
   private lastReport: string;
+  private static instante: AccoutingDepartment;
   get mostRecentReport() {
     if (this.lastReport) {
       return this.lastReport;
@@ -52,9 +53,18 @@ class AccoutingDepartment extends Department {
     this.addReport(value);
   }
 
-  constructor(id: number, private reports: string[]) {
+  private constructor(id: number, private reports: string[]) {
     super(id, "Accouting");
     this.lastReport = reports[0];
+  }
+
+  static getInstance() {
+    if (AccoutingDepartment.instante) {
+      return this.instante;
+    }
+
+    this.instante = new AccoutingDepartment(2, []);
+    return this.instante;
   }
 
   addReport(text: string) {
@@ -97,7 +107,7 @@ it.printEmployeeInfo();
 
 // accoutingCopy.describe();
 
-const accouting = new AccoutingDepartment(2, []);
+const accouting = AccoutingDepartment.getInstance();
 
 console.log(accouting);
 
