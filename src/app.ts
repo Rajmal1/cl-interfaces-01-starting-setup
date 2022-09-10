@@ -1,11 +1,16 @@
-class Department {
+abstract class Department {
+  static fiscalYear = 2022;
   // public name: string;
   protected employees: string[] = [];
 
-  constructor(private readonly id: number, public name: string) {}
+  constructor(protected readonly id: number, public name: string) {
+    // console.log(Department.fiscalYear);
+  }
 
-  describe(this: Department) {
-    console.log(`Department: (${this.id}): ${this.name}`);
+  abstract describe(this: Department): void;
+
+  static createEmproyee(name: string) {
+    return { name: name };
   }
 
   addEmployee(employee: string) {
@@ -24,6 +29,10 @@ class ITDepartment extends Department {
   constructor(id: number, admins: string[]) {
     super(id, "IT");
     this.admins = admins;
+  }
+
+  override describe() {
+    console.log("IT Department - ID: " + this.id);
   }
 }
 
@@ -57,6 +66,10 @@ class AccoutingDepartment extends Department {
     console.log(this.reports);
   }
 
+  override describe() {
+    console.log("Accouting Department - ID: " + this.id);
+  }
+
   override addEmployee(name: string) {
     if (name === "Max") {
       return;
@@ -65,6 +78,9 @@ class AccoutingDepartment extends Department {
     this.employees.push(name);
   }
 }
+
+const employee1 = Department.createEmproyee("Max");
+console.log(employee1, Department.fiscalYear);
 
 const it = new ITDepartment(1, ["Max"]);
 
@@ -92,5 +108,8 @@ console.log(accouting.mostRecentReport);
 accouting.addEmployee("Max");
 accouting.addEmployee("Manu");
 
-accouting.printReports();
-accouting.printEmployeeInfo();
+// accouting.printReports();
+// accouting.printEmployeeInfo();
+
+it.describe();
+accouting.describe();
